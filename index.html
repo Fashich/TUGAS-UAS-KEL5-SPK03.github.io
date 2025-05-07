@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pendukung Keputusan AHP</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <h3>Menu Utama</h3>
+        <ul>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#kriteria">Kelola Kriteria</a></li>
+            <li><a href="#alternatif">Kelola Alternatif</a></li>
+            <li><a href="#matriks">Matriks Perbandingan</a></li>
+            <li><a href="#hasil">Hasil Evaluasi</a></li>
+            <li><a href="#swot">Analisis SWOT</a></li>
+            <li><a href="#rencana">Rencana Strategis</a></li>
+        </ul>
+        <div class="theme-toggle">
+            <input type="checkbox" id="dark-mode-toggle">
+            <label for="dark-mode-toggle"></label>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h2>Selamat Datang di SPK Prioritas Infrastruktur Kota X</h2>
+            <button onclick="location.href='#tambah-data'">Tambah Data</button>
+            <button onclick="generateReport()">Lihat Laporan</button>
+        </header>
+
+        <!-- Dashboard Summary -->
+        <section id="summary">
+            <div class="card">
+                <h4>Total Kriteria:</h4>
+                <ul>
+                    <li>C1: Dampak Sosial</li>
+                    <li>C2: Efisiensi Biaya</li>
+                    <li>C3: Keberlanjutan Lingkungan</li>
+                    <li>C4: Kelayakan Teknis</li>
+                    <li>C5: Urgensi</li>
+                    <li>C6: Manfaat Ekonomi</li>
+                    <li>C7: Partisipasi Masyarakat</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Total Alternatif:</h4>
+                <ul>
+                    <li>A1: Perbaikan Jalan Raya</li>
+                    <li>A2: Rumah Sakit Baru</li>
+                    <li>A3: Rehabilitasi Sekolah</li>
+                    <li>A4: Air Bersih</li>
+                    <li>A5: Energi Terbarukan</li>
+                    <li>A6: Transportasi Umum</li>
+                    <li>A7: Digitalisasi Infrastruktur</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Prioritas Terakhir:</h4>
+                <p>A1 (Perbaikan Jalan Raya)</p>
+            </div>
+        </section>
+
+        <!-- Manage Criteria -->
+        <section id="kriteria">
+            <h3>Kelola Kriteria</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Kode</th>
+                        <th>Nama Kriteria</th>
+                        <th>Bobot</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>C1</td>
+                        <td>Dampak Sosial</td>
+                        <td>0.30</td>
+                        <td>
+                            <button onclick="showModal('edit-kriteria')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>C2</td>
+                        <td>Efisiensi Biaya</td>
+                        <td>0.15</td>
+                        <td>
+                            <button onclick="showModal('edit-kriteria')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>C3</td>
+                        <td>Keberlanjutan Lingkungan</td>
+                        <td>0.10</td>
+                        <td>
+                            <button onclick="showModal('edit-kriteria')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>C4</td>
+                        <td>Kelayakan Teknis</td>
+                        <td>0.20</td>
+                        <td>
+                            <button onclick="showModal('edit-kriteria')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>C5</td>
+                        <td>Urgensi</td>
+                        <td>0.05</td>
+                        <td>
+                            <button onclick="showModal('edit-kriteria')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>C6</td>
+                        <td>Manfaat Ekonomi</td>
+                        <td>0.10</td>
+                        <td>
+                            <button onclick="showModal('edit-kriteria')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>C7</td>
+                        <td>Partisipasi Masyarakat</td>
+                        <td>0.10</td>
+                        <td>
+                            <button onclick="showModal('edit-kriteria')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button onclick="showModal('tambah-kriteria')">Tambah Kriteria</button>
+        </section>
+
+        <!-- Manage Alternatives -->
+        <section id="alternatif">
+            <h3>Kelola Alternatif</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Kode</th>
+                        <th>Nama Proyek</th>
+                        <th>Skor Akhir</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A1</td>
+                        <td>Perbaikan Jalan Raya</td>
+                        <td>0.185</td>
+                        <td><span class="badge success">Disetujui</span></td>
+                        <td>
+                            <button onclick="showModal('edit-alternatif')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>A2</td>
+                        <td>Rumah Sakit Baru</td>
+                        <td>0.150</td>
+                        <td><span class="badge warning">Dalam Proses</span></td>
+                        <td>
+                            <button onclick="showModal('edit-alternatif')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>A3</td>
+                        <td>Rehabilitasi Sekolah</td>
+                        <td>0.125</td>
+                        <td><span class="badge warning">Dalam Proses</span></td>
+                        <td>
+                            <button onclick="showModal('edit-alternatif')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>A4</td>
+                        <td>Air Bersih</td>
+                        <td>0.110</td>
+                        <td><span class="badge info">Diajukan</span></td>
+                        <td>
+                            <button onclick="showModal('edit-alternatif')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>A5</td>
+                        <td>Energi Terbarukan</td>
+                        <td>0.095</td>
+                        <td><span class="badge info">Diajukan</span></td>
+                        <td>
+                            <button onclick="showModal('edit-alternatif')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>A6</td>
+                        <td>Transportasi Umum</td>
+                        <td>0.080</td>
+                        <td><span class="badge info">Diajukan</span></td>
+                        <td>
+                            <button onclick="showModal('edit-alternatif')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>A7</td>
+                        <td>Digitalisasi Infrastruktur</td>
+                        <td>0.075</td>
+                        <td><span class="badge info">Diajukan</span></td>
+                        <td>
+                            <button onclick="showModal('edit-alternatif')">Edit</button>
+                            <button onclick="deleteItem()">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="text" id="search-alternatif" placeholder="Cari proyek...">
+            <button onclick="sortAlternatif()">Urutkan Skor</button>
+        </section>
+
+        <!-- Pairwise Comparison Matrix -->
+        <section id="matriks">
+            <h3>Matriks Perbandingan Berpasangan</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>C1</th>
+                        <th>C2</th>
+                        <th>C3</th>
+                        <th>C4</th>
+                        <th>C5</th>
+                        <th>C6</th>
+                        <th>C7</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>C1</th>
+                        <td><select><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></td>
+                        <td><select><option value="1/2">1/2</option><option value="1/3">1/3</option><option value="1/4">1/4</option><option value="1/5">1/5</option><option value="1/6">1/6</option><option value="1/7">1/7</option><option value="1/8">1/8</option><option value="1/9">1/9</option><option value="1">1</option></select></td>
+                        <td><select><option value="1/3">1/3</option><option value="1/4">1/4</option><option value="1/5">1/5</option><option value="1/6">1/6</option><option value="1/7">1/7</option><option value="1/8">1/8</option><option value="1/9">1/9</option><option value="1">1</option><option value="2">2</option></select></td>
+                        <td><select><option value="1/4">1/4</option><option value="1/5">1/5</option><option value="1/6">1/6</option><option value="1/7">1/7</option><option value="1/8">1/8</option><option value="1/9">1/9</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td>
+                        <td><select><option value="1/5">1/5</option><option value="1/6">1/6</option><option value="1/7">1/7</option><option value="1/8">1/8</option><option value="1/9">1/9</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></td>
+                        <td><select><option value="1/6">1/6</option><option value="1/7">1/7</option><option value="1/8">1/8</option><option value="1/9">1/9</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+                        <td><select><option value="1/7">1/7</option><option value="1/8">1/8</option><option value="1/9">1/9</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></td>
+                    </tr>
+                    <tr>
+                        <th>C2</th>
+                        <td><select><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="1">1</option></select></td>
+                        <td><select><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></td>
+                        <td><select><option value="1/2">1/2</option><option value="1/3">1/3</option><option value="1/4">1/4</option><option value="1/5">1/5</option><option value="1/6">1/6</option><option value="1/7">1/7</option><option value="1/8">1/8</option><option value="1/9">1/9</option><option value="1">1</option></select></td>
+                        <td><select><option value="1/3">1/3</option><option value="1/4">1/4</option><option value="1/5">1/5</option><option value="1/6">1/6</option><option value="1/7">1/7</option><option value="1/8">1/8</option><option value="1/9">1/9</option><option value="1">1</option><option value="2">2</option></select></td>
+                        <td><select><option value="1/4">1/4</option><option value="1/5">1/5</option><option value="1/6">1/6</option><option value="1/7">1/7</option><option value="1/8">1/8</option><option value="1/9">1/9</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td>
+                        <td><select><option value="1/5">1/5</option><option value="1/6">1/6</option><option value="1/7">1/7</option><option value="1/8">1/8</option><option value="1/9">1/9</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></td>
+                        <td><select><option value="1/6">1/6</option><option value="1/7">1/7</option><option value="1/8">1/8</option><option value="1/9">1/9</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></td>
+                    </tr>
+                    <!-- ... tambahkan semua baris matriks lainnya ... -->
+                </tbody>
+            </table>
+            <button onclick="calculateCR()">Hitung CR</button>
+            <p>Consistency Ratio: <span id="cr-value">0.00</span></p>
+        </section>
+
+        <!-- Results -->
+        <section id="hasil">
+            <h3>Hasil Evaluasi</h3>
+            <canvas id="chart"></canvas>
+            <button onclick="exportPDF()">Download PDF</button>
+        </section>
+
+        <!-- Dark Mode Toggle Script -->
+        <script>
+            const toggle = document.getElementById('dark-mode-toggle');
+            toggle.addEventListener('change', () => {
+                document.body.classList.toggle('dark-mode');
+            });
+        </script>
+
+        <!-- Chart.js Integration -->
+        <script>
+            const ctx = document.getElementById('chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7'],
+                    datasets: [{
+                        label: 'Bobot Kriteria',
+                        data: [0.30, 0.15, 0.10, 0.20, 0.05, 0.10, 0.10],
+                        backgroundColor: '#2196F3'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+
+        <!-- AHP Calculation Logic -->
+        <script>
+            function calculateCR() {
+                // Ambil nilai dari matriks perbandingan
+                const matrix = [];
+                const rows = document.querySelectorAll('#matriks tbody tr');
+                
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('select');
+                    const rowValues = Array.from(cells).map(cell => {
+                        const value = cell.value;
+                        // Jika nilai dalam bentuk pecahan, ubah ke desimal
+                        if (value.includes('/')) {
+                            const [numerator, denominator] = value.split('/').map(Number);
+                            return numerator / denominator;
+                        }
+                        return parseFloat(value);
+                    });
+                    matrix.push(rowValues);
+                });
+
+                // Hitung jumlah kolom
+                const colSums = matrix[0].map((_, colIndex) => 
+                    matrix.reduce((sum, row) => sum + row[colIndex], 0)
+                );
+
+                // Normalisasi matriks
+                const normalized = matrix.map(row => 
+                    row.map((value, colIndex) => value / colSums[colIndex])
+                );
+
+                // Hitung rata-rata baris
+                const rowAverages = normalized.map(row => 
+                    row.reduce((sum, value) => sum + value, 0) / row.length
+                );
+
+                // Hitung jumlah bobot kriteria
+                const totalWeight = rowAverages.reduce((sum, avg) => sum + avg, 0);
+
+                // Hitung bobot normalisasi
+                const normalizedWeights = rowAverages.map(avg => avg / totalWeight);
+
+                // Hitung jumlah baris × matriks perbandingan
+                const weightedSum = matrix.map(row => 
+                    row.reduce((sum, value, colIndex) => sum + value * normalizedWeights[colIndex], 0)
+                );
+
+                // Hitung rasio antara jumlah baris × matriks perbandingan dengan bobot normalisasi
+                const ratios = weightedSum.map((sum, index) => sum / normalizedWeights[index]);
+
+                // Hitung λmax (rata-rata dari rasio)
+                const lambdaMax = ratios.reduce((sum, ratio) => sum + ratio, 0) / ratios.length;
+
+                // Hitung Consistency Index (CI)
+                const n = matrix.length;
+                const CI = (lambdaMax - n) / (n - 1);
+
+                // Random Index berdasarkan ukuran matriks
+                const RI = [0, 0, 0.58, 0.9, 1.12, 1.24, 1.32, 1.41];
+
+                // Hitung Consistency Ratio (CR)
+                const CR = CI / RI[n - 1];
+
+                // Tampilkan hasil CR
+                document.getElementById('cr-value').textContent = CR.toFixed(2);
+                
+                // Tampilkan pesan validasi
+                if (CR < 0.1) {
+                    alert('Matriks konsisten! CR = ' + CR.toFixed(2) + ' < 0.1');
+                } else {
+                    alert('Matriks tidak konsisten! CR = ' + CR.toFixed(2) + ' ≥ 0.1');
+                }
+            }
+
+            function generateReport() {
+                // Implementasi logika export laporan
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Tambahkan judul
+                doc.setFontSize(16);
+                doc.text("Laporan Hasil Evaluasi SPK Prioritas Infrastruktur Kota X", 20, 20);
+                
+                // Tambahkan tabel kriteria
+                doc.autoTable({
+                    html: '#kriteria table',
+                    startY: 30,
+                    styles: { fontSize: 10 }
+                });
+                
+                // Tambahkan tabel alternatif
+                doc.autoTable({
+                    html: '#alternatif table',
+                    startY: doc.lastAutoTable.finalY + 10,
+                    styles: { fontSize: 10 }
+                });
+                
+                // Simpan PDF
+                doc.save('laporan_spk.pdf');
+            }
+        </script>
+    </div>
+</body>
+</html>
